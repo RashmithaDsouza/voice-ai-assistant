@@ -1,0 +1,96 @@
+.header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: calc(100% - 32px);
+  max-width: 1000px;
+  margin: 16px auto 0;
+  padding: 12px 20px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #7c3aed 0%, #a21caf 60%, #c026d3 100%);
+  box-shadow: 0 8px 32px rgba(147, 51, 234, 0.35);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.logo svg {
+  width: 22px;
+  height: 22px;
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.titles h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.titles span {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(7, 4, 15, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f3e8ff;
+  font-size: 0.75rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fbbf24;
+}
+
+.online .dot {
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+}
+
+@media (max-width: 640px) {
+  .titles span {
+    display: none;
+  }
+
+  .status {
+    font-size: 0.68rem;
+    padding: 5px 10px;
+  }
+}

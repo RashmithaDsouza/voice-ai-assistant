@@ -1,0 +1,53 @@
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+  background: var(--clr-error-dim);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: var(--rad-md);
+  padding: var(--sp-sm) var(--sp-md);
+  animation: slideDown 0.25s ease forwards;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  color: var(--clr-error);
+}
+
+.text {
+  font-size: 0.85rem;
+  color: var(--clr-error);
+  line-height: 1.4;
+}
+
+.dismiss {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--clr-error);
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: var(--rad-sm);
+  transition: opacity var(--ease-fast), background var(--ease-fast);
+}
+
+.dismiss:hover {
+  opacity: 1;
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.dismiss:focus-visible {
+  outline: 2px solid var(--clr-error);
+  outline-offset: 2px;
+}

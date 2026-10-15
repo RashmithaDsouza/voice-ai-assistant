@@ -1,0 +1,115 @@
+/* ============================================
+   VOICE AI ASSISTANT — GLOBAL DESIGN SYSTEM
+   Purple Neon Theme
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Core palette */
+  --clr-bg:           #05030c;
+  --clr-surface:      #0e081c;
+  --clr-surface-2:    #140a28;
+  --clr-surface-3:    #1e1038;
+  --clr-border:       rgba(139, 92, 246, 0.18);
+  --clr-border-hover: rgba(192, 132, 252, 0.45);
+
+  --clr-accent:       #a855f7;
+  --clr-accent-dim:   rgba(168, 85, 247, 0.15);
+  --clr-accent-glow:  rgba(168, 85, 247, 0.4);
+
+  --clr-primary:      #7c3aed;
+  --clr-secondary:    #c026d3;
+
+  --clr-success:      #34d399;
+  --clr-success-dim:  rgba(52, 211, 153, 0.15);
+  --clr-warning:      #fbbf24;
+  --clr-error:        #f87171;
+  --clr-error-dim:    rgba(248, 113, 113, 0.12);
+
+  --clr-text-primary:   #f3e8ff;
+  --clr-text-secondary: #c4b5fd;
+  --clr-text-muted:     #6b5a85;
+
+  /* Gradients */
+  --grad-accent: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%);
+  --grad-header: linear-gradient(90deg, #7c3aed 0%, #a21caf 60%, #c026d3 100%);
+  --grad-surface: linear-gradient(180deg, #140a28 0%, #0e081c 100%);
+  --grad-mic: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%);
+
+  /* Typography */
+  --font-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Spacing */
+  --sp-xs:  4px;
+  --sp-sm:  8px;
+  --sp-md:  16px;
+  --sp-lg:  24px;
+  --sp-xl:  32px;
+  --sp-2xl: 48px;
+
+  /* Border radius */
+  --rad-sm:   8px;
+  --rad-md:   12px;
+  --rad-lg:   16px;
+  --rad-xl:   24px;
+  --rad-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.5);
+  --shadow-glow: 0 0 40px var(--clr-accent-glow);
+  --shadow-header: 0 8px 32px rgba(147, 51, 234, 0.35);
+
+  /* Transitions */
+  --ease-fast:   0.15s ease;
+  --ease-normal: 0.25s ease;
+  --ease-slow:   0.4s ease;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-base);
+  background-color: var(--clr-bg);
+  color: var(--clr-text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: var(--clr-surface); }
+::-webkit-scrollbar-thumb  { background: var(--clr-surface-3); border-radius: var(--rad-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--clr-text-muted); }
+
+/* Utility: visually hidden */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}

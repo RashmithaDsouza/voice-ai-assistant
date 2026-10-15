@@ -1,0 +1,600 @@
+/* ================================================
+   VOICE AI ASSISTANT — APP MODULE STYLES
+   Purple Neon · Glassmorphism · Reference Design
+   ================================================ */
+
+/* Layout */
+.layout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #05030c;
+  overflow-x: hidden;
+}
+
+/* Background glow blobs */
+.glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(140px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glowOne {
+  width: 600px;
+  height: 600px;
+  top: -5%;
+  left: -10%;
+  background: rgba(124, 58, 237, 0.3);
+}
+
+.glowTwo {
+  width: 500px;
+  height: 500px;
+  bottom: -15%;
+  right: -8%;
+  background: rgba(192, 38, 211, 0.22);
+}
+
+.glowThree {
+  width: 400px;
+  height: 400px;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(168, 85, 247, 0.12);
+}
+
+/* Main content */
+.main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Content / chat area */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-top: 16px;
+}
+
+/* =========================================
+   WELCOME STATE (orb + heading)
+   ========================================= */
+.welcome {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 14px;
+  padding: 32px 0;
+}
+
+.title {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #f3e8ff;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: #8b7aa8;
+  font-size: 0.9rem;
+}
+
+/* Orb */
+.orbWrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.orbGlow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.35), transparent 70%);
+  animation: orbPulse 3s ease-in-out infinite;
+}
+
+.orb {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.35), transparent 65%);
+  animation: float 4.5s ease-in-out infinite;
+}
+
+.orbCore {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #c084fc, #6d28d9 70%);
+  box-shadow:
+    0 0 50px rgba(168, 85, 247, 0.8),
+    0 0 100px rgba(168, 85, 247, 0.3),
+    inset 0 0 18px rgba(255, 255, 255, 0.22);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50%      { transform: scale(1.15); opacity: 1; }
+}
+
+/* =========================================
+   RECORDED AUDIO PREVIEW
+   ========================================= */
+.recordedAudio {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 14px;
+  margin: 12px auto;
+  max-width: 640px;
+  width: 100%;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 16px;
+  background: rgba(20, 10, 40, 0.7);
+  font-size: 0.8rem;
+  color: #c4b5fd;
+}
+
+.recordedAudio audio {
+  flex: 1;
+  height: 32px;
+  min-width: 0;
+}
+
+.recordedAudio button {
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.15);
+  color: #fca5a5;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  transition: background var(--ease-fast);
+}
+
+.recordedAudio button:hover {
+  background: rgba(248, 113, 113, 0.3);
+}
+
+/* =========================================
+   BOTTOM PANEL (composer + chips + footer)
+   ========================================= */
+.bottomPanel {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0 22px;
+  background: linear-gradient(to bottom, transparent 0%, #05030c 35%);
+}
+
+/* Composer */
+.composer {
+  width: 100%;
+  max-width: 700px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 18px;
+  background: rgba(14, 8, 28, 0.92);
+  padding: 14px 16px 10px;
+  transition: border-color var(--ease-normal), box-shadow var(--ease-normal);
+}
+
+.composer:focus-within {
+  border-color: rgba(192, 132, 252, 0.7);
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.22);
+}
+
+.inputForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputForm textarea {
+  width: 100%;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #f3e8ff;
+  font: inherit;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.inputForm textarea::placeholder {
+  color: #6b5a85;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.rightTools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iconBtn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #8b7aa8;
+  cursor: pointer;
+  transition: background var(--ease-fast), color var(--ease-fast);
+}
+
+.iconBtn:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.18);
+  color: #e9d5ff;
+}
+
+.iconBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.iconBtn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.sep {
+  width: 1px;
+  height: 18px;
+  margin: 0 6px;
+  background: rgba(139, 92, 246, 0.3);
+}
+
+/* Small mic button */
+.micSmall {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: #3b2a66;
+  color: #e9d5ff;
+  cursor: pointer;
+  transition: background var(--ease-fast), box-shadow var(--ease-fast), transform var(--ease-fast);
+}
+
+.micSmall:hover:not(:disabled) {
+  background: #7c3aed;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+  transform: scale(1.05);
+}
+
+.micSmall:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.micSmallActive {
+  background: linear-gradient(135deg, #ef4444, #f97316) !important;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5) !important;
+  animation: micPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes micPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.08); }
+}
+
+.micSmall svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* =========================================
+   SUGGESTION CHIPS
+   ========================================= */
+.tryLabel {
+  font-size: 0.72rem;
+  color: #8b7aa8;
+  margin-top: 2px;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 700px;
+}
+
+.suggestions button {
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  background: rgba(20, 10, 40, 0.75);
+  color: #d8c8f5;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: border-color var(--ease-fast), background var(--ease-fast), transform var(--ease-fast);
+}
+
+.suggestions button:hover:not(:disabled) {
+  border-color: rgba(192, 132, 252, 0.7);
+  background: rgba(60, 25, 100, 0.6);
+  transform: translateY(-1px);
+}
+
+.suggestions button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+  font-size: 0.68rem;
+  color: #6b5a85;
+  margin-top: 4px;
+}
+
+.footer button {
+  border: none;
+  background: none;
+  color: #f87171;
+  cursor: pointer;
+  font-size: 0.68rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer button:hover {
+  color: #fca5a5;
+}
+
+/* =========================================
+   RECORDING OVERLAY (full-screen)
+   ========================================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: rgba(5, 3, 12, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  animation: overlayIn 0.35s ease forwards;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.bigMicShell {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bigRing {
+  position: absolute;
+  inset: -36px;
+  border-radius: 50%;
+  border: 1px solid rgba(216, 180, 254, 0.3);
+}
+
+.bigRingPulse {
+  position: absolute;
+  inset: -36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(192, 132, 252, 0.5);
+  animation: ripple 2s ease-out infinite;
+}
+
+@keyframes ripple {
+  0%   { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+.bigMic {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%);
+  box-shadow:
+    0 0 80px rgba(168, 85, 247, 0.65),
+    0 0 160px rgba(168, 85, 247, 0.2),
+    inset 0 0 35px rgba(255, 255, 255, 0.12);
+  animation: bigPulse 1.8s ease-in-out infinite;
+}
+
+.bigMic svg {
+  width: 72px;
+  height: 72px;
+}
+
+@keyframes bigPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #f3e8ff;
+}
+
+.liveDot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.2; }
+}
+
+.recLabel {
+  font-size: 0.85rem;
+  color: #8b7aa8;
+}
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-size: 0.87rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #fff;
+  transition: transform var(--ease-fast), box-shadow var(--ease-fast);
+}
+
+.actions button:hover {
+  transform: translateY(-1px);
+}
+
+.actions svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btnDelete {
+  border: none;
+  background: #ef4444;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+.btnDelete:hover {
+  box-shadow: 0 6px 24px rgba(239, 68, 68, 0.5);
+}
+
+.btnStop {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(20, 10, 40, 0.8);
+}
+
+.btnStop:hover {
+  background: rgba(30, 15, 60, 0.9);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btnSend {
+  border: none;
+  background: linear-gradient(135deg, #7c3aed, #c026d3);
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
+}
+
+.btnSend:hover {
+  box-shadow: 0 6px 24px rgba(168, 85, 247, 0.6);
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 640px) {
+  .main {
+    padding: 0 14px;
+  }
+
+  .composer {
+    border-radius: 14px;
+    padding: 12px 12px 8px;
+  }
+
+  .bigMicShell, .bigMic {
+    width: 160px;
+    height: 160px;
+  }
+
+  .bigMic svg {
+    width: 56px;
+    height: 56px;
+  }
+
+  .suggestions button {
+    font-size: 0.7rem;
+    padding: 6px 12px;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

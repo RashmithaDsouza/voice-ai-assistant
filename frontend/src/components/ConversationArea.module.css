@@ -1,0 +1,48 @@
+.area {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-lg);
+  scroll-behavior: smooth;
+}
+
+/* Empty state */
+.empty {
+  height: 100%;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-md);
+  text-align: center;
+  padding: var(--sp-xl);
+}
+
+.emptyIcon {
+  color: var(--clr-text-muted);
+  opacity: 0.5;
+  margin-bottom: var(--sp-sm);
+}
+
+.emptyTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--clr-text-secondary);
+}
+
+.emptyText {
+  font-size: 0.875rem;
+  color: var(--clr-text-muted);
+  max-width: 300px;
+  line-height: 1.6;
+}
+
+/* Message list */
+.messageList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  max-width: 780px;
+  margin: 0 auto;
+  width: 100%;
+}

@@ -1,0 +1,35 @@
+# Frontend
+node_modules/
+dist/
+dist-ssr/
+coverage/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*
+!.env.example
+
+# Local files
+*.local
+*.log
+.DS_Store
+Thumbs.db
+
+# AI models and generated audio
+models/
+*.onnx
+*.wav
+*.mp3
+
+# IDE
+.vscode/
+.idea/
