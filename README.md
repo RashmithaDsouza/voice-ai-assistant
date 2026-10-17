@@ -101,15 +101,16 @@ Notes:
 
 ```mermaid
 flowchart LR
-    User[User] --> Browser[React frontend\nVite app]
-    Browser -->|HTTP /api/chat| FastAPI[FastAPI backend\nmain.py]
-    Browser -->|Multipart file /api/voice-chat| FastAPI
-    FastAPI --> STT[Faster-Whisper\ntranscribe()]
-    FastAPI --> LLM[Ollama\nchat()]
-    FastAPI --> TTS[Piper\nTTS synthesize()]
-    LLM -->|response text| FastAPI
-    TTS -->|WAV audio| Browser
-    Browser --> Speaker[Browser audio playback]
+  User[User] --> Browser[React + Vite browser frontend]
+  Browser -->|JSON /api/chat| FastAPI[FastAPI backend main.py]
+  Browser -->|Audio /api/voice-chat| FastAPI
+  FastAPI -->|Voice input| STT["Faster-Whisper transcribe()"]
+  STT -->|Transcription| FastAPI
+  FastAPI -->|User text| LLM["Ollama chat()"]
+  LLM -->|Response text| FastAPI
+  FastAPI -->|Response text| TTS["Piper synthesize()"]
+  TTS -->|WAV audio response| Browser
+  Browser --> Speaker[Browser audio playback]
 ```
 
 ## Prerequisites
