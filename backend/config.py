@@ -30,6 +30,7 @@ OLLAMA_SYSTEM_PROMPT = os.getenv("OLLAMA_SYSTEM_PROMPT", (
 
 # ── Piper (TTS) ─────────────────────────────────────────────────
 PIPER_VOICE = os.getenv("PIPER_VOICE", "en_US-lessac-medium")
+PIPER_HINDI_VOICE = os.getenv("PIPER_HINDI_VOICE", "hi_IN-rohan-medium")
 PIPER_SPEAKER_ID = int(os.getenv("PIPER_SPEAKER", "0"))
 PIPER_LENGTH_SCALE = float(os.getenv("PIPER_SPEED", "1.0"))  # < 1 = faster, > 1 = slower
 

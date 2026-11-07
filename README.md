@@ -21,8 +21,9 @@ The following behaviors are present in the codebase inspected in this project:
 - Faster-Whisper transcription of uploaded audio
 - Local Ollama chat using a configured model and per-session message history
 - Piper-based speech synthesis to WAV audio
-- Frontend display of user transcription and assistant text
-- Frontend audio playback for TTS output
+- Frontend text chat and microphone recording connected to the backend API
+- Assistant WAV responses are played automatically when the browser permits, with a manual Play control as a fallback
+- English and Hindi are the only supported conversation languages; Hindi speech uses a Hindi Piper voice
 - Basic error handling for empty audio, failed requests, and TTS failures
 
 ## Planned or not yet verified features
@@ -180,10 +181,15 @@ OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "120"))
 
 This means the project currently expects Ollama to be running locally and the model `qwen2.5:3b` to be available. The health endpoint checks for Ollama and confirms the configured model is available.
 
-Typical local Ollama setup on Windows:
+Typical local Ollama setup on Windows (use separate terminals if Ollama is not already running):
 
 ```powershell
 ollama serve
+```
+
+In another PowerShell terminal, download the configured model once:
+
+```powershell
 ollama pull qwen2.5:3b
 ```
 
@@ -203,6 +209,7 @@ The current backend configuration is defined in `backend/config.py`.
 - `OLLAMA_MODEL` — defaults to `qwen2.5:3b`
 - `OLLAMA_TIMEOUT` — defaults to `120`
 - `PIPER_VOICE` — defaults to `en_US-lessac-medium`
+- `PIPER_HINDI_VOICE` — defaults to `hi_IN-rohan-medium` and downloads on first Hindi speech request if missing
 - `PIPER_SPEAKER` — defaults to `0`
 - `PIPER_SPEED` — defaults to `1.0`
 - `MAX_AUDIO_MB` — defaults to `25`
@@ -277,9 +284,12 @@ Request body:
 ```json
 {
   "session_id": "abc123",
-  "message": "Hello there"
+  "message": "Hello there",
+  "language": "en"
 }
 ```
+
+`language` accepts only `en` (English) or `hi` (Hindi); it defaults to `en`.
 
 Response shape:
 
@@ -336,8 +346,8 @@ Response includes both transcription and text response, plus audio payload if TT
 5. Either:
    - type a message and send it, or
    - click the microphone and record audio
-6. The backend returns the transcribed text, assistant message, and audio response if TTS succeeds.
-7. Browser audio playback is available through the frontend audio player component.
+6. The backend returns the transcription, assistant reply, and generated WAV audio if TTS succeeds.
+7. The app attempts to play each spoken reply. If browser autoplay is blocked, use the Play button shown with the assistant message.
 
 ## Troubleshooting
 
@@ -368,12 +378,14 @@ ollama list
 ### TTS issues
 
 - Ensure the Piper voice files exist under `backend/models/piper`.
+- The Hindi voice (`hi_IN-rohan-medium`, about 63 MB) is downloaded the first time a Hindi reply is spoken; allow that first request to finish.
 - Confirm `piper-tts` was installed correctly in the backend environment.
-- If TTS fails, the backend still returns the assistant text with `tts_error` set.
+- If TTS fails, the backend still returns the assistant text with `tts_error` set; the app displays that error.
+- Check the backend terminal for the detailed Piper error. The voice WAV is synthesized locally by Piper.
 
 ### Audio playback issues
 
-- Browser autoplay may be blocked until a user interaction occurs; the frontend includes playback controls.
+- Browser autoplay may be blocked until a user interaction occurs; use the Play control beside the assistant reply.
 - Confirm the response payload contains `audio_base64` and the browser can decode WAV audio.
 - If playback fails, the UI shows an error message and the text response remains available.
 

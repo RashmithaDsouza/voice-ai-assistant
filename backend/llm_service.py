@@ -4,7 +4,8 @@ LLM Service — Ollama chat completions with conversation context
 
 import logging
 import time
-from typing import AsyncGenerator
+import unicodedata
+from typing import AsyncGenerator, Literal
 
 import httpx
 
@@ -51,11 +52,37 @@ class ConversationManager:
 conversation_manager = ConversationManager()
 
 
-def _build_payload(session_id: str) -> list[dict]:
+def _build_payload(session_id: str, language: Literal['en', 'hi']) -> list[dict]:
     """Build the full messages array with system prompt + conversation history."""
-    messages = [{"role": "system", "content": OLLAMA_SYSTEM_PROMPT}]
+    language_instruction = (
+        'Respond only in English.'
+        if language == 'en'
+        else (
+            'Reply only in Hindi (हिन्दी). Write the entire reply in Devanagari script; '
+            'do not use Latin transliteration, English, Malayalam, or any other language.'
+        )
+    )
+    messages = [{
+        'role': 'system',
+        'content': f'{OLLAMA_SYSTEM_PROMPT} {language_instruction}',
+    }]
     messages.extend(conversation_manager.get_messages(session_id))
     return messages
+
+
+def _matches_language_script(text: str, language: Literal['en', 'hi']) -> bool:
+    letters = [char for char in text if unicodedata.category(char).startswith('L')]
+    if not letters:
+        return False
+
+    scripts = [unicodedata.name(char, '') for char in letters]
+    if language == 'en':
+        return all('LATIN' in name for name in scripts)
+
+    return (
+        any('DEVANAGARI' in name for name in scripts)
+        and all('DEVANAGARI' in name for name in scripts)
+    )
 
 
 async def check_health() -> dict:
@@ -78,38 +105,66 @@ async def check_health() -> dict:
         return {"online": False, "model": OLLAMA_MODEL, "error": str(exc)}
 
 
-async def chat(session_id: str, user_text: str) -> dict:
+async def chat(
+    session_id: str,
+    user_text: str,
+    language: Literal['en', 'hi'] = 'en',
+) -> dict:
     """
     Send user text to Ollama and get full response (non-streaming).
 
     Returns dict with: response, latency, model
     """
-    messages = _build_payload(session_id)
+    messages = _build_payload(session_id, language)
     messages.append({"role": "user", "content": user_text})
 
     start = time.time()
-    try:
-        async with httpx.AsyncClient(timeout=OLLAMA_TIMEOUT) as client:
-            resp = await client.post(
-                f"{OLLAMA_BASE_URL}/api/chat",
-                json={
-                    "model": OLLAMA_MODEL,
-                    "messages": messages,
-                    "stream": False,
-                },
+    for attempt in range(2):
+        try:
+            async with httpx.AsyncClient(timeout=OLLAMA_TIMEOUT) as client:
+                resp = await client.post(
+                    f"{OLLAMA_BASE_URL}/api/chat",
+                    json={
+                        "model": OLLAMA_MODEL,
+                        "messages": messages,
+                        "stream": False,
+                    },
+                )
+                resp.raise_for_status()
+                data = resp.json()
+        except httpx.ConnectError:
+            raise ConnectionError(
+                "Cannot connect to Ollama. Make sure Ollama is running: `ollama serve`"
             )
-            resp.raise_for_status()
-            data = resp.json()
-    except httpx.ConnectError:
-        raise ConnectionError(
-            "Cannot connect to Ollama. Make sure Ollama is running: `ollama serve`"
-        )
-    except httpx.TimeoutException:
-        raise TimeoutError(f"Ollama timed out after {OLLAMA_TIMEOUT}s")
-    except httpx.HTTPStatusError as exc:
-        raise RuntimeError(f"Ollama error {exc.response.status_code}: {exc.response.text}")
+        except httpx.TimeoutException:
+            raise TimeoutError(f"Ollama timed out after {OLLAMA_TIMEOUT}s")
+        except httpx.HTTPStatusError as exc:
+            raise RuntimeError(f"Ollama error {exc.response.status_code}: {exc.response.text}")
 
-    assistant_text = data.get("message", {}).get("content", "").strip()
+        assistant_text = data.get("message", {}).get("content", "").strip()
+        if _matches_language_script(assistant_text, language):
+            break
+
+        logger.warning(
+            "Model response did not match selected language script: language=%s attempt=%d",
+            language,
+            attempt + 1,
+        )
+        messages[0]["content"] += (
+            " IMPORTANT: Your previous reply used the wrong writing system. "
+            + (
+                "Write only English using Latin letters."
+                if language == 'en'
+                else "Write only Hindi using Devanagari letters, such as नमस्ते. Do not write Malayalam."
+            )
+        )
+    else:
+        assistant_text = (
+            "Sorry, I couldn't produce an English reply. Please try again."
+            if language == 'en'
+            else "माफ़ कीजिए, मैं अभी हिंदी में जवाब नहीं दे पा रहा हूँ। कृपया फिर से पूछें।"
+        )
+
     elapsed = time.time() - start
 
     conversation_manager.add_user_message(session_id, user_text)
@@ -127,14 +182,18 @@ async def chat(session_id: str, user_text: str) -> dict:
     }
 
 
-async def chat_stream(session_id: str, user_text: str) -> AsyncGenerator[str, None]:
+async def chat_stream(
+    session_id: str,
+    user_text: str,
+    language: Literal['en', 'hi'] = 'en',
+) -> AsyncGenerator[str, None]:
     """
     Stream response tokens from Ollama for lower perceived latency.
 
     Yields text chunks as they arrive.
     """
     conversation_manager.add_user_message(session_id, user_text)
-    messages = _build_payload(session_id)
+    messages = _build_payload(session_id, language)
     full_response = []
 
     try:

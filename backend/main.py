@@ -2,6 +2,7 @@ import asyncio
 import base64
 import logging
 from contextlib import asynccontextmanager
+from typing import Literal
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,6 +20,7 @@ MAX_AUDIO_SIZE = MAX_AUDIO_SIZE_MB * 1024 * 1024
 class ChatRequest(BaseModel):
     session_id: str = Field(min_length=1, max_length=128)
     message: str = Field(min_length=1, max_length=20_000)
+    language: Literal['en', 'hi'] = 'en'
 
 
 @asynccontextmanager
@@ -56,9 +58,9 @@ def _audio_response(audio_bytes: bytes) -> dict:
     }
 
 
-async def _generate_speech(text: str) -> dict:
+async def _generate_speech(text: str, language: str) -> dict:
     try:
-        result = await asyncio.to_thread(synthesize, text)
+        result = await asyncio.to_thread(synthesize, text, language)
     except Exception as exc:
         logger.exception("Text-to-speech synthesis failed")
         return {
@@ -88,7 +90,7 @@ async def health() -> dict:
 @app.post("/api/transcribe")
 async def transcribe_audio(
     file: UploadFile = File(...),
-    language: str | None = Form(default=None, max_length=16),
+    language: Literal['en', 'hi'] = Form(default='en'),
 ) -> dict:
     audio = await _read_audio(file)
     try:
@@ -108,7 +110,7 @@ async def text_chat(request: ChatRequest) -> dict:
     if not user_text:
         raise HTTPException(status_code=422, detail="Message must not be blank.")
     try:
-        result = await chat(request.session_id, user_text)
+        result = await chat(request.session_id, user_text, request.language)
     except ConnectionError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except TimeoutError as exc:
@@ -116,7 +118,7 @@ async def text_chat(request: ChatRequest) -> dict:
     except RuntimeError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
 
-    speech = await _generate_speech(result["response"])
+    speech = await _generate_speech(result["response"], request.language)
     return {**result, **speech}
 
 
@@ -124,7 +126,7 @@ async def text_chat(request: ChatRequest) -> dict:
 async def voice_chat(
     file: UploadFile = File(...),
     session_id: str = Form(..., min_length=1, max_length=128),
-    language: str | None = Form(default=None, max_length=16),
+    language: Literal['en', 'hi'] = Form(default='en'),
 ) -> dict:
     audio = await _read_audio(file)
     try:
@@ -144,7 +146,7 @@ async def voice_chat(
         )
 
     try:
-        result = await chat(session_id, user_text)
+        result = await chat(session_id, user_text, language)
     except ConnectionError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except TimeoutError as exc:
@@ -152,7 +154,7 @@ async def voice_chat(
     except RuntimeError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
 
-    speech = await _generate_speech(result["response"])
+    speech = await _generate_speech(result["response"], language)
     return {
         "transcription": transcription,
         **result,

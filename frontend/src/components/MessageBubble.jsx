@@ -1,4 +1,5 @@
 import styles from './MessageBubble.module.css'
+import AudioPlayer from './AudioPlayer.jsx'
 
 /**
  * MessageBubble — a single message in the conversation.
@@ -8,7 +9,7 @@ import styles from './MessageBubble.module.css'
  * @param {string} props.timestamp  ISO string
  * @param {boolean} props.isLoading show typing skeleton
  */
-export default function MessageBubble({ role, text, timestamp, isLoading = false }) {
+export default function MessageBubble({ role, text, timestamp, audioUrl = null, isLoading = false }) {
   const isUser = role === 'user'
 
   const formattedTime = timestamp
@@ -38,6 +39,7 @@ export default function MessageBubble({ role, text, timestamp, isLoading = false
         ) : (
           <>
             <p className={styles.text}>{text}</p>
+            {!isUser && audioUrl && <AudioPlayer audioUrl={audioUrl} autoPlay />}
             {timestamp && (
               <time className={styles.time} dateTime={timestamp}>{formattedTime}</time>
             )}

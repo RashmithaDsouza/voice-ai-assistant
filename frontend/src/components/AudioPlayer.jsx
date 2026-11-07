@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './AudioPlayer.module.css'
 
 /**
@@ -8,17 +8,23 @@ import styles from './AudioPlayer.module.css'
  * @param {string}  props.audioUrl   blob:// or data: URL for audio
  * @param {boolean} props.isLoading  TTS is being generated
  */
-export default function AudioPlayer({ audioUrl = null, isLoading = false }) {
+export default function AudioPlayer({ audioUrl = null, isLoading = false, autoPlay = false }) {
   const audioRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [error, setError] = useState(false)
+
+  useEffect(() => {
+    if (!autoPlay || !audioUrl || isLoading) return
+    setError(false)
+    audioRef.current?.play().catch(() => setError(true))
+  }, [audioUrl, autoPlay, isLoading])
 
   const handlePlay = () => {
     if (!audioRef.current) return
     if (playing) {
       audioRef.current.pause()
     } else {
-      audioRef.current.play()
+      audioRef.current.play().catch(() => setError(true))
     }
   }
 
@@ -83,7 +89,7 @@ export default function AudioPlayer({ audioUrl = null, isLoading = false }) {
       </div>
 
       {error && (
-        <p className={styles.error} role="alert">Audio playback failed.</p>
+        <p className={styles.error} role="alert">Automatic playback was blocked or failed. Press play to retry.</p>
       )}
     </div>
   )

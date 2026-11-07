@@ -400,6 +400,172 @@
   color: #fca5a5;
 }
 
+.appHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 0 16px;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.brandGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.brandMark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  place-items: center;
+  border: 1px solid var(--clr-border-hover);
+  border-radius: 12px;
+  color: #f0abfc;
+  background: var(--clr-surface-2);
+}
+
+.brandMark svg {
+  width: 22px;
+  height: 22px;
+}
+
+.brandTitle {
+  color: var(--clr-text-primary);
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.brandSubtitle {
+  color: var(--clr-text-muted);
+  font-size: 0.75rem;
+}
+
+.serviceStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  color: var(--clr-text-secondary);
+  font-size: 0.75rem;
+}
+
+.languagePicker {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--clr-border);
+  border-radius: 9px;
+  background: var(--clr-surface);
+}
+
+.languagePicker button {
+  min-width: 62px;
+  min-height: 30px;
+  border: 0;
+  border-radius: 6px;
+  padding: 4px 8px;
+  background: transparent;
+  color: var(--clr-text-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+}
+
+.languagePicker button:hover {
+  color: var(--clr-text-primary);
+}
+
+.languagePicker .languageSelected {
+  background: var(--clr-surface-3);
+  color: var(--clr-text-primary);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--clr-warning);
+}
+
+.statusDot[data-ready='true'] {
+  background: var(--clr-success);
+}
+
+.conversationFrame {
+  display: flex;
+  flex: 1;
+  min-height: 360px;
+  max-height: calc(100vh - 230px);
+  overflow: hidden;
+}
+
+.composerArea {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 12px 0 20px;
+}
+
+.composerRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 100px;
+  align-items: center;
+  gap: 16px;
+}
+
+.composerRow > :first-child {
+  width: 100%;
+  min-width: 0;
+}
+
+.clearChat {
+  align-self: flex-end;
+  border: 0;
+  padding: 4px 0;
+  background: transparent;
+  color: var(--clr-text-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+}
+
+.clearChat:hover:not(:disabled) {
+  color: var(--clr-text-primary);
+}
+
+.clearChat:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (max-width: 600px) {
+  .main {
+    padding: 0 14px;
+  }
+
+  .appHeader {
+    padding-top: 16px;
+  }
+
+  .brandSubtitle {
+    display: none;
+  }
+
+  .conversationFrame {
+    min-height: 320px;
+    max-height: calc(100vh - 190px);
+  }
+
+  .composerRow {
+    grid-template-columns: minmax(0, 1fr) 78px;
+    gap: 8px;
+  }
+}
+
 /* =========================================
    RECORDING OVERLAY (full-screen)
    ========================================= */

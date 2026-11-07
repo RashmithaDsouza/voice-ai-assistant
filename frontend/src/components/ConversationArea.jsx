@@ -48,6 +48,7 @@ export default function ConversationArea({ messages = [], isLoading = false }) {
               role={msg.role}
               text={msg.text}
               timestamp={msg.timestamp}
+              audioUrl={msg.audioUrl}
             />
           ))}
           {isLoading && (
