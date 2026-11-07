@@ -410,16 +410,5 @@ For a manual validation workflow, run these in order:
 7. Confirm transcription and assistant response appear in the app
 8. Verify generated audio can play in the browser
 
-## Limitations and future improvements
 
-- No dedicated VAD implementation is present in the inspected code.
-- No interruption or ongoing speech cancellation logic is currently implemented.
-- Millisecond-level latency metrics are not instrumented at the project level.
-- The project currently relies on in-memory conversation state and does not persist chats across restarts.
-- The backend does not currently provide an explicit streaming chat UI path.
-- Frontend audio format handling is browser-dependent because `MediaRecorder` output may vary by browser and OS.
-- The current project is a working local prototype rather than a fully hardened production deployment.
 
-## Notes
-
-This documentation reflects the files and code that are actually present in the workspace as inspected. Features not present in code, or not validated in this review, are explicitly marked as unverified or planned.
